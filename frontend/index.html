@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="XOVA AI ENGINE - Build any application from a single prompt">
+  <meta name="generator" content="XOVA AI ENGINE v2.0.0">
+  <title>XOVA AI ENGINE - Build Anything</title>
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://cdn.xova.pro">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/style.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0f0f1b">
+</head>
+<body class="xova-theme">
+  <!-- Animated Sky Background -->
+  <div id="sky-background" class="sky-bg" aria-hidden="true">
+    <div class="clouds-layer"></div>
+    <div class="gradient-overlay"></div>
+  </div>
+  
+  <!-- Rain Effect -->
+  <div id="rain-effect" class="rain-container" aria-hidden="true"></div>
+  
+  <!-- Main App -->
+  <div id="app" class="app-container glass-panel">
+    <!-- Navigation -->
+    <nav class="main-nav glass-nav">
+      <div class="nav-brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-text">XOVA</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link active">Home</a></li>
+        <li><a href="/projects" class="nav-link">Projects</a></li>
+        <li><a href="/api-docs" class="nav-link">API Docs</a></li>
+        <li><a href="/roadmap" class="nav-link">Roadmap</a></li>
+        <li><a href="/community" class="nav-link">Community</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">🌓</button>
+        <button id="auth-btn" class="primary-btn">Sign In</button>
+      </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <!-- Ghost AI Assistant -->
+        <div id="ghost-assistant" class="ghost-assistant" role="status" aria-live="polite">
+          <div class="ghost-body">
+            <div class="ghost-face">
+              <div class="ghost-eyes">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+              </div>
+              <div class="ghost-mouth"></div>
+            </div>
+            <div class="ghost-hands">
+              <div class="hand left"></div>
+              <div class="hand right"></div>
+            </div>
+          </div>
+          <div class="ghost-glow"></div>
+        </div>
+        
+        <!-- Input Area -->
+        <div class="input-container glass-input-wrapper">
+          <textarea 
+            id="prompt-input" 
+            class="prompt-input glass-input" 
+            placeholder="Build anything..." 
+            rows="3"
+            aria-label="Describe the application you want to build"
+          ></textarea>
+          
+          <!-- Suggestion Chips -->
+          <div class="suggestion-chips">
+            <button class="chip" data-prompt="A todo app with user authentication and cloud sync">📝 Todo App</button>
+            <button class="chip" data-prompt="E-commerce store with product catalog, cart, and Stripe payments">🛒 E-commerce</button>
+            <button class="chip" data-prompt="Real-time chat application with rooms and file sharing">💬 Chat App</button>
+            <button class="chip" data-prompt="Dashboard with analytics charts and data tables">📊 Analytics Dashboard</button>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button id="analyze-btn" class="primary-btn">
+              <span class="btn-text">Analyze & Generate</span>
+              <span class="btn-loader" hidden>
+                <span class="loader-dot"></span>
+                <span class="loader-dot"></span>
+                <span class="loader-dot"></span>
+              </span>
+            </button>
+            <button id="publish-btn" class="secondary-btn" disabled>Publish</button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Workspace Section -->
+      <section class="workspace-section" hidden>
+        <div class="workspace-grid">
+          <!-- Code Stream Panel -->
+          <div class="code-panel glass-panel">
+            <div class="panel-header">
+              <h3>Generated Code</h3>
+              <div class="panel-actions">
+                <button class="icon-btn" id="copy-code-btn" aria-label="Copy code">📋</button>
+                <button class="icon-btn" id="download-code-btn" aria-label="Download code">⬇️</button>
+              </div>
+            </div>
+            <div id="code-stream" class="code-stream" aria-live="polite"></div>
+          </div>
+          
+          <!-- Live Preview Panel -->
+          <div class="preview-panel glass-panel">
+            <div class="panel-header">
+              <h3>Live Preview</h3>
+              <div class="panel-actions">
+                <button class="icon-btn" id="refresh-preview-btn" aria-label="Refresh preview">🔄</button>
+                <button class="icon-btn" id="open-preview-btn" aria-label="Open in new tab">↗️</button>
+              </div>
+            </div>
+            <div class="preview-container">
+              <iframe 
+                id="preview-frame" 
+                class="preview-frame" 
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                title="Application Preview"
+              ></iframe>
+              <div id="preview-placeholder" class="preview-placeholder">
+                <p>Your generated app will appear here</p>
+                <div class="placeholder-animation"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Deployment Panel -->
+    <section id="deployment-panel" class="deployment-panel glass-panel" hidden>
+      <div class="panel-header">
+        <h3>Deploy Your Application</h3>
+      </div>
+      <div class="deployment-options">
+        <div class="deployment-card">
+          <h4>Vercel</h4>
+          <p>Instant global deployment with serverless functions</p>
+          <button id="deploy-vercel-btn" class="deploy-btn vercel-btn">
+            <span class="btn-icon">▲</span>
+            Deploy to Vercel
+          </button>
+        </div>
+        <div class="deployment-card">
+          <h4>GitHub</h4>
+          <p>Push code to repository with CI/CD workflow</p>
+          <button id="deploy-github-btn" class="deploy-btn github-btn">
+            <span class="btn-icon">🐙</span>
+            Push to GitHub
+          </button>
+        </div>
+      </div>
+      <div id="deployment-logs" class="deployment-logs" aria-live="polite"></div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="footer-content">
+        <p>Generated by <strong>XOVA AI ENGINE</strong> v2.0.0</p>
+        <div class="footer-links">
+          <a href="/docs">Documentation</a>
+          <a href="/support">Support</a>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+  
+  <!-- Scripts -->
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
