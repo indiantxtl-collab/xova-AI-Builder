@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb",
+        "includeFiles": "config/**, engine/**, utils/**, database/**"
+      }
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static",
+      "config": {
+        "distDir": "frontend"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/server.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "https://*.xova.pro",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-XOVA-Project"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate"
+      }
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  },
+  "regions": ["iad1"],
+  "github": {
+    "silent": true,
+    "autoJobCancelation": true
+  }
+}
